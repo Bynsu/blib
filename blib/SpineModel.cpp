@@ -2,6 +2,8 @@
 
 #include <spine/spine.h>
 #include <spine/extension.h>
+#include <spine/SkeletonJson.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <blib/util/Log.h>

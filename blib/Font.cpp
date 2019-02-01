@@ -152,13 +152,20 @@ namespace blib
 		std::wstring space;
 		typedef wchar_t ch;
 		typedef std::wstring str;
+		bool not_valid_utf8 = false;
 
 		if (this->utf8)
 		{
-			text = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>{}.from_bytes(utf8);
-			space = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>{}.from_bytes(" ");
-		}
-		else
+			try {
+				text = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>{}.from_bytes(utf8);
+				space = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>{}.from_bytes(" ");
+			} catch ( std::range_error ex ) { // Not a valid utf8
+				not_valid_utf8 = true;
+			}
+		} else
+			not_valid_utf8 = true;
+
+		if ( not_valid_utf8 )
 		{
 			text = std::wstring(utf8.begin(), utf8.end());
 			for (int i = 0; i < utf8.size(); i++)
@@ -172,13 +179,20 @@ namespace blib
 		std::u32string space;
 		typedef char32_t ch;
 		typedef std::u32string str;
+		bool not_valid_utf8 = false;
 
-		if (this->utf8)
+		if ( this->utf8 )
 		{
-			text = std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(utf8);
-			space = std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(" ");
-		}
-		else
+			try {
+				text = std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(utf8);
+				space = std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(" ");
+			} catch ( std::range_error ex ) { // Not a valid utf8
+				not_valid_utf8 = true;
+			}
+		} else
+			not_valid_utf8 = true;
+
+		if ( not_valid_utf8 )
 		{
 			text = std::u32string(utf8.begin(), utf8.end());
 			for (int i = 0; i < utf8.size(); i++)
